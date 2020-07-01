@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "167778850714",
+    "firebase_url": "https://wassupdog-65741.firebaseio.com",
+    "project_id": "wassupdog-65741",
+    "storage_bucket": "wassupdog-65741.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167778850714:android:500b0d3e2f502608254c23",
+        "android_client_info": {
+          "package_name": "com.pyo.safe_guard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "167778850714-tblep68e8kj3l37fba3qq9tetkhdg2ap.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pyo.safe_guard",
+            "certificate_hash": "822638fd0bb8f494c5bb383918c37e95eb3d1a3d"
+          }
+        },
+        {
+          "client_id": "167778850714-cqeq3knnrd2iem5h76c7an410691ac88.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVgaSO64_6FPTfAHMIea8CWB56YQ89GnE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "167778850714-cqeq3knnrd2iem5h76c7an410691ac88.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
