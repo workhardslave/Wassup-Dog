@@ -1,2 +1,2 @@
 # moproject
- android
+Android + Kotlin + Firebase
