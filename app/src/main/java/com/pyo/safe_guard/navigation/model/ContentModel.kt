@@ -1,7 +1,7 @@
 package com.pyo.safe_guard.navigation.model
 
 
-data class ContentDTO(var explain : String? = null,
+data class ContentModel(var explain : String? = null,
                       var imageUrl : String? = null,
                       var uid : String? = null,
                       var userId : String? = null,

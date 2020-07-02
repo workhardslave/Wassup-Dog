@@ -12,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.pyo.safe_guard.R
-import com.pyo.safe_guard.navigation.model.ContentDTO
+import com.pyo.safe_guard.navigation.model.ContentModel
 import kotlinx.android.synthetic.main.activity_add_photo.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -70,7 +70,7 @@ class AddPhotoActivity : AppCompatActivity() {
         storageRef?.putFile(photoUri!!)?.continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
         }?.addOnSuccessListener { uri ->
-            var contentDTO = ContentDTO()
+            var contentDTO = ContentModel()
 
             //Insert downloadUrl of image
             contentDTO.imageUrl = uri.toString()

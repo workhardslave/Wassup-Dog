@@ -1,6 +1,6 @@
 package com.pyo.safe_guard.navigation.util
 
-import com.pyo.safe_guard.navigation.model.PushDTO
+import com.pyo.safe_guard.navigation.model.PushModel
 
 
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +29,7 @@ class FcmPush {
             if(task.isSuccessful){
                 var token = task?.result?.get("pushToken").toString()
 
-                var pushDTO = PushDTO()
+                var pushDTO = PushModel()
                 pushDTO.to = token
                 pushDTO.notification.title = title
                 pushDTO.notification.body = message

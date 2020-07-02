@@ -12,8 +12,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pyo.safe_guard.R
-import com.pyo.safe_guard.navigation.model.AlarmDTO
-import com.pyo.safe_guard.navigation.model.ContentDTO
+import com.pyo.safe_guard.navigation.model.AlarmModel
+import com.pyo.safe_guard.navigation.model.ContentModel
 import com.pyo.safe_guard.navigation.util.FcmPush
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
@@ -32,7 +32,7 @@ class CommentActivity : AppCompatActivity() {
         comment_recyclerview.layoutManager = LinearLayoutManager(this)
 
         comment_btn_send?.setOnClickListener {
-            var comment = ContentDTO.Comment()
+            var comment = ContentModel.Comment()
             comment.userId = FirebaseAuth.getInstance().currentUser?.email
             comment.uid = FirebaseAuth.getInstance().currentUser?.uid
             comment.comment = comment_edit_message.text.toString()
@@ -44,7 +44,7 @@ class CommentActivity : AppCompatActivity() {
         }
     }
     fun commentAlarm(destinationUid : String, message : String){
-        var alarmDTO = AlarmDTO()
+        var alarmDTO = AlarmModel()
         alarmDTO.destinationUid = destinationUid
         alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
         alarmDTO.kind = 1
@@ -58,7 +58,7 @@ class CommentActivity : AppCompatActivity() {
     }
     inner class CommentRecyclerviewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
-        var comments : ArrayList<ContentDTO.Comment> = arrayListOf()
+        var comments : ArrayList<ContentModel.Comment> = arrayListOf()
         init {
             FirebaseFirestore.getInstance()
                 .collection("images")
@@ -70,7 +70,7 @@ class CommentActivity : AppCompatActivity() {
                     if(querySnapshot == null)return@addSnapshotListener
 
                     for(snapshot in querySnapshot.documents!!){
-                        comments.add(snapshot.toObject(ContentDTO.Comment::class.java)!!)
+                        comments.add(snapshot.toObject(ContentModel.Comment::class.java)!!)
                     }
                     notifyDataSetChanged()
                 }

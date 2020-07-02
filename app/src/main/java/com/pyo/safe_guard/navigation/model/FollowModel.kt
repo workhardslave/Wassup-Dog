@@ -1,6 +1,6 @@
 package com.pyo.safe_guard.navigation.model
 
-data class FollowDTO(
+data class FollowModel(
     var followerCount : Int = 0,
     var followers : MutableMap<String,Boolean> = HashMap(),
 

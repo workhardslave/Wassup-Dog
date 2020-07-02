@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pyo.safe_guard.R
-import com.pyo.safe_guard.navigation.model.ContentDTO
+import com.pyo.safe_guard.navigation.model.ContentModel
 import kotlinx.android.synthetic.main.fragment_search.view.*
 
 class SearchFragment : Fragment() {
@@ -29,7 +29,7 @@ class SearchFragment : Fragment() {
         return fragmentView
     }
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+        var contentDTOs : ArrayList<ContentModel> = arrayListOf()
         init {
             firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 //Sometimes, This code return null of querySnapshot when it signout
@@ -37,7 +37,7 @@ class SearchFragment : Fragment() {
 
                 //Get data
                 for(snapshot in querySnapshot.documents){
-                    contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
+                    contentDTOs.add(snapshot.toObject(ContentModel::class.java)!!)
                 }
                 notifyDataSetChanged()
             }

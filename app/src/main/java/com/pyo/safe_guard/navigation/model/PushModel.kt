@@ -1,6 +1,6 @@
 package com.pyo.safe_guard.navigation.model
 
-data class PushDTO(
+data class PushModel(
     var to : String? = null,
     var notification : Notification = Notification()
 ){

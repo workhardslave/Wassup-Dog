@@ -1,6 +1,6 @@
 package com.pyo.safe_guard.navigation.model
 
-data class AlarmDTO(
+data class AlarmModel(
     var destinationUid : String? = null,
     var userId : String? = null,
     var uid : String? = null,

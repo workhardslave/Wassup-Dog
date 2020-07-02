@@ -19,9 +19,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.pyo.safe_guard.LoginActivity
 import com.pyo.safe_guard.MainActivity
 import com.pyo.safe_guard.R
-import com.pyo.safe_guard.navigation.model.AlarmDTO
-import com.pyo.safe_guard.navigation.model.ContentDTO
-import com.pyo.safe_guard.navigation.model.FollowDTO
+import com.pyo.safe_guard.navigation.model.AlarmModel
+import com.pyo.safe_guard.navigation.model.ContentModel
+import com.pyo.safe_guard.navigation.model.FollowModel
 import com.pyo.safe_guard.navigation.util.FcmPush
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_account.view.*
@@ -44,7 +44,7 @@ class AccountFragment : Fragment() {
 
         if(uid == currentUserUid){
             //MyPage
-            fragmentView?.account_btn_follow_signout?.text = getString(R.string.signout)
+            fragmentView?.account_btn_follow_signout?.text = "Signout"
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
                 activity?.finish()
                 startActivity(Intent(activity, LoginActivity::class.java))
@@ -68,10 +68,12 @@ class AccountFragment : Fragment() {
         fragmentView?.account_reyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_reyclerview?.layoutManager = GridLayoutManager(activity!!, 3)
 
-        fragmentView?.account_iv_profile?.setOnClickListener {
-            var photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            activity?.startActivityForResult(photoPickerIntent,PICK_PROFILE_FROM_ALBUM)
+        if(uid == currentUserUid) {
+            fragmentView?.account_iv_profile?.setOnClickListener {
+                var photoPickerIntent = Intent(Intent.ACTION_PICK)
+                photoPickerIntent.type = "image/*"
+                activity?.startActivityForResult(photoPickerIntent,PICK_PROFILE_FROM_ALBUM)
+            }
         }
         getProfileImage()
         getFollowerAndFollowing()
@@ -80,7 +82,7 @@ class AccountFragment : Fragment() {
     fun getFollowerAndFollowing(){
         firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
             if(documentSnapshot == null) return@addSnapshotListener
-            var followDTO = documentSnapshot.toObject(FollowDTO::class.java)
+            var followDTO = documentSnapshot.toObject(FollowModel::class.java)
             if(followDTO?.followingCount != null){
                 fragmentView?.account_tv_following_count?.text = followDTO?.followingCount?.toString()
             }
@@ -105,9 +107,9 @@ class AccountFragment : Fragment() {
         //Save data to my account
         var tsDocFollowing = firestore?.collection("users")?.document(currentUserUid!!)
         firestore?.runTransaction { transaction ->
-            var followDTO = transaction.get(tsDocFollowing!!).toObject(FollowDTO::class.java)
+            var followDTO = transaction.get(tsDocFollowing!!).toObject(FollowModel::class.java)
             if(followDTO == null){
-                followDTO = FollowDTO()
+                followDTO = FollowModel()
                 followDTO!!.followingCount = 1
                 followDTO!!.followings[uid!!] = true
 
@@ -132,9 +134,9 @@ class AccountFragment : Fragment() {
 
         var tsDocFollower = firestore?.collection("users")?.document(uid!!)
         firestore?.runTransaction { transaction ->
-            var followDTO = transaction.get(tsDocFollower!!).toObject(FollowDTO::class.java)
+            var followDTO = transaction.get(tsDocFollower!!).toObject(FollowModel::class.java)
             if(followDTO == null){
-                followDTO = FollowDTO()
+                followDTO = FollowModel()
                 followDTO!!.followerCount = 1
                 followDTO!!.followers[currentUserUid!!] = true
                 followerAlarm(uid!!)
@@ -157,7 +159,7 @@ class AccountFragment : Fragment() {
         }
     }
     fun followerAlarm(destinationUid : String){
-        var alarmDTO = AlarmDTO()
+        var alarmDTO = AlarmModel()
         alarmDTO.destinationUid = destinationUid
         alarmDTO.userId = auth?.currentUser?.email
         alarmDTO.uid = auth?.currentUser?.uid
@@ -178,7 +180,7 @@ class AccountFragment : Fragment() {
         }
     }
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+        var contentDTOs : ArrayList<ContentModel> = arrayListOf()
         init {
             firestore?.collection("images")?.whereEqualTo("uid",uid)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 //Sometimes, This code return null of querySnapshot when it signout
@@ -186,7 +188,7 @@ class AccountFragment : Fragment() {
 
                 //Get data
                 for(snapshot in querySnapshot.documents){
-                    contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
+                    contentDTOs.add(snapshot.toObject(ContentModel::class.java)!!)
                 }
                 fragmentView?.account_tv_post_count?.text = contentDTOs.size.toString()
                 notifyDataSetChanged()

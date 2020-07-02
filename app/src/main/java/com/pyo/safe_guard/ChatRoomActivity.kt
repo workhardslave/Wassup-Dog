@@ -11,12 +11,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pyo.safe_guard.Adapter.ChatLeftYou
 import com.pyo.safe_guard.Adapter.ChatRightMe
-import com.pyo.safe_guard.Adapter.UserItem
 import com.pyo.safe_guard.navigation.model.ChatModel
 import com.pyo.safe_guard.navigation.model.ChatNewModel
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import kotlinx.android.synthetic.main.activity_chat_list.*
 import kotlinx.android.synthetic.main.activity_chat_room.*
 
 class ChatRoomActivity : AppCompatActivity() {
@@ -56,20 +54,24 @@ class ChatRoomActivity : AppCompatActivity() {
             }
 
             override fun onChildAdded(p0: DataSnapshot, previousChildName: String?) {
-                Log.d(TAG, "p0 : "+p0)
+                Log.d(TAG, "p0 : " + p0)
 
 //                val msg = p0.getValue(ChatNewModel::class.java)?.message
 //                Log.d(TAG, "p0 : "+ msg)
 
                 val model = p0.getValue(ChatModel::class.java)
 
+
                 val msg = model?.message.toString()
                 val who = model?.who
                 val yourUid = model?.yourUid
 
+                var list = mutableListOf<String>()
+                list.add(msg)
 
+                for(i in list.indices)
                 if(who == "me") {
-                    adapter.add(ChatRightMe(msg))
+                    adapter.add(ChatRightMe(list[i]))
                 } else {
                     db.collection("users")
                         .get()
@@ -77,7 +79,7 @@ class ChatRoomActivity : AppCompatActivity() {
                             for(document in result) {
                                 // 상대방 이름 출력
                                 if(document.get("uid") == yourUid) {
-                                    adapter.add(ChatLeftYou(msg, document.get("username").toString()))
+                                    adapter.add(ChatLeftYou(list[i], document.get("username").toString()))
                                     return@addOnSuccessListener
                                 }
                             }
@@ -96,7 +98,7 @@ class ChatRoomActivity : AppCompatActivity() {
         recyclerview_chat_room.adapter = adapter
         readRef.addChildEventListener(childEventListener)
 
-//        val myRef_list = database.getReference("message-user-list")
+        val myRef_list = database.getReference("message-user-list")
 
         button_chat_room.setOnClickListener {
 
@@ -109,7 +111,7 @@ class ChatRoomActivity : AppCompatActivity() {
             val chat_get = ChatModel(yourUid, myUid.toString(),  message, System.currentTimeMillis(), "you")
             myRef.child(yourUid.toString()).child(myUid.toString()).push().setValue(chat_get)
 
-//            myRef_list.child(myUid.toString()).child(yourUid).setValue(chat)
+            myRef_list.child(myUid.toString()).child(yourUid).setValue(chat)
 
             editText_chat_room.setText("")
 

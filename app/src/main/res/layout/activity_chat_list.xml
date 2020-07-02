@@ -6,16 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".ChatListActivity">
 
-    <Button
-        android:id="@+id/myChatList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="myChatList"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:background="#FAB5B5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="#FAB5B5"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="113dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="250dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="7dp"
+                android:paddingLeft="30dp"
+                android:fontFamily="@font/berkshire_swash"
+                android:text="산책공유플랫폼"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/toolbar_title_image"
+                android:layout_width="390dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/logo_title" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_list"
