@@ -17,8 +17,9 @@ import com.pyo.safe_guard.navigation.model.AlarmModel
 import com.pyo.safe_guard.navigation.model.ContentModel
 import com.pyo.safe_guard.navigation.util.FcmPush
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.item_comment.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
-import kotlinx.android.synthetic.main.item_detail.view.detailviewitem_profile_image
+
 
 class HomeFragment : Fragment() {
     var firestore: FirebaseFirestore? = null
@@ -86,17 +87,20 @@ class HomeFragment : Fragment() {
             // 컨텐츠 설명
             viewholder.detailviewitem_explain_textview.text = contentModels!![p1].explain
 
-            // 좋아요
-            viewholder.detailviewitem_favoritecounter_textview.text = "Likes " + contentModels!![p1].favoriteCount
-
             // 프로필 이미지
-            firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
-                if(documentSnapshot == null) return@addSnapshotListener
-                if(documentSnapshot.data != null){
-                    var url = documentSnapshot?.data!!["image"]
-                    Glide.with(activity!!).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image)
+            FirebaseFirestore.getInstance()
+                .collection("profileImages")
+                .document(contentModels[p1].uid!!)
+                .get()
+                .addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        var url = task.result!!["image"]
+                        Glide.with(p0.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image)
+                    }
                 }
-            }
+
+            // 좋아요
+            viewholder.detailviewitem_favoritecounter_textview.text = "좋아요 " + contentModels!![p1].favoriteCount
 
             // 버튼 클릭시
             viewholder.detailviewitem_favorite_imageview.setOnClickListener {
@@ -112,7 +116,7 @@ class HomeFragment : Fragment() {
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
             }
 
-            // 프로필 이미지 클릭 시 발생 이벤트
+            // 이미지 클릭 시 발생 이벤트
             viewholder.detailviewitem_profile_image.setOnClickListener {
                 var fragment = AccountFragment()
                 var bundle = Bundle()
@@ -137,11 +141,11 @@ class HomeFragment : Fragment() {
                 var contentDTO = transaction.get(tsDoc!!).toObject(ContentModel::class.java)
 
                 if(contentDTO!!.favorites.containsKey(uid)){
-                    //When the button is clicked
+                    // 버튼을 클릭했을 때
                     contentDTO?.favoriteCount = contentDTO?.favoriteCount - 1
                     contentDTO?.favorites.remove(uid)
                 }else{
-                    //When the button is not clicked
+                    // 버튼을 클릭하지 않았을 때
                     contentDTO?.favoriteCount = contentDTO?.favoriteCount + 1
                     contentDTO?.favorites[uid!!] = true
                     favoriteAlarm(contentModels[position].uid!!)

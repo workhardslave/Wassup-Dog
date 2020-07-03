@@ -2,12 +2,11 @@
     <string name="app_name">왔어독</string>
 
     <!-- Bottom Navigation View -->
-    <string name="home">Home</string>
-    <string name="search">Search</string>
-    <string name="gallery">Gallery</string>
-    <string name="chat">Chat</string>
-    <string name="favorite">Favorite</string>
-    <string name="account">Account</string>
+    <string name="home">메인 홈</string>
+    <string name="search">둘러보기</string>
+    <string name="gallery">게시글 작성</string>
+    <string name="alarm">내 피드</string>
+    <string name="account">내 계정</string>
 
 
     <!-- Alarm -->
@@ -17,9 +16,9 @@
 
 
     <!-- Account -->
-    <string name="post">Post</string>
-    <string name="following">Following</string>
-    <string name="follower">Follower</string>
+    <string name="post">게시물</string>
+    <string name="following">팔로잉</string>
+    <string name="follower">팔로워</string>
     <string name="follow">팔로우</string>
     <string name="follow_cancel">팔로우 취소</string>
     <string name="profile">프로필</string>

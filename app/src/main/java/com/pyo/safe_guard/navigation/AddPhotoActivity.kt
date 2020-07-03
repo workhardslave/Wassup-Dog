@@ -27,17 +27,17 @@ class AddPhotoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_photo)
 
-        //Initiate
+
         storage = FirebaseStorage.getInstance()
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        //Open the album
+        // 앨범 열기
         var photoPickerIntent = Intent(Intent.ACTION_PICK)
         photoPickerIntent.type = "image/*"
         startActivityForResult(photoPickerIntent,PICK_IMAGE_FROM_ALBUM)
 
-        //add image upload event
+        // 이미지 업로드 이벤트
         addphoto_btn_upload.setOnClickListener {
             contentUpload()
         }
@@ -47,80 +47,51 @@ class AddPhotoActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == PICK_IMAGE_FROM_ALBUM){
             if(resultCode == Activity.RESULT_OK){
-                //This is path to the selected image
+                //이미지 경로
                 photoUri = data?.data
                 addphoto_image.setImageURI(photoUri)
 
             }else{
-                //Exit the addPhotoActivity if you leave the album without selecting it
                 finish()
-
             }
         }
     }
     fun contentUpload(){
-        //Make filename
 
+        // 파일 이름
         var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         var imageFileName = "IMAGE_" + timestamp + "_.png"
 
         var storageRef = storage?.reference?.child("images")?.child(imageFileName)
 
-        //Promise method
+        // 파일 업로드(Promise : 구글 권장 방식)
         storageRef?.putFile(photoUri!!)?.continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
         }?.addOnSuccessListener { uri ->
-            var contentDTO = ContentModel()
+            var contentModels = ContentModel()
 
-            //Insert downloadUrl of image
-            contentDTO.imageUrl = uri.toString()
+            // 이미지의 다운로드 url
+            contentModels.imageUrl = uri.toString()
 
-            //Insert uid of user
-            contentDTO.uid = auth?.currentUser?.uid
+            // 유저의 uid
+            contentModels.uid = auth?.currentUser?.uid
 
-            //Insert userId
-            contentDTO.userId = auth?.currentUser?.email
+            // 유저 아이디
+            contentModels.userId = auth?.currentUser?.email
 
-            //Insert explain of content
-            contentDTO.explain = addphoto_edit_explain.text.toString()
+            // 컨텐츠 설명
+            contentModels.explain = addphoto_edit_explain.text.toString()
 
-            //Insert timestamp
-            contentDTO.timestamp = System.currentTimeMillis()
+            // 시간
+            contentModels.timestamp = System.currentTimeMillis()
 
-            firestore?.collection("images")?.document()?.set(contentDTO)
+            firestore?.collection("images")?.document()?.set(contentModels)
 
             setResult(Activity.RESULT_OK)
 
             finish()
         }
 
-        //Callback method
-//        storageRef?.putFile(photoUri!!)?.addOnSuccessListener {
-//            storageRef.downloadUrl.addOnSuccessListener { uri ->
-//                var contentDTO = ContentDTO()
-//
-//                //Insert downloadUrl of image
-//                contentDTO.imageUrl = uri.toString()
-//
-//                //Insert uid of user
-//                contentDTO.uid = auth?.currentUser?.uid
-//
-//                //Insert userId
-//                contentDTO.userId = auth?.currentUser?.email
-//
-//                //Insert explain of content
-//                contentDTO.explain = addphoto_edit_explain.text.toString()
-//
-//                //Insert timestamp
-//                contentDTO.timestamp = System.currentTimeMillis()
-//
-//                firestore?.collection("images")?.document()?.set(contentDTO)
-//
-//                setResult(Activity.RESULT_OK)
-//
-//                finish()
-//            }
-//        }
     }
 }
 

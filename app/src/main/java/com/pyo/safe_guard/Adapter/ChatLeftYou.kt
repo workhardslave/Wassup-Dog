@@ -12,6 +12,6 @@ class ChatLeftYou(val msg: String, val stranger: String) : Item<GroupieViewHolde
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.left_name.text = stranger
-        viewHolder.itemView.left_chat.text = msg
+        viewHolder.itemView.left_msg.text = msg
     }
 }

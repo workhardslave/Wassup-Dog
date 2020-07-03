@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="65dp"
-    android:orientation="horizontal"
-    android:layout_marginRight="50dp">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp">
+
+    <TextView
+        android:id="@+id/left_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="왼쪽 메세지"
+        android:maxWidth="240dp"
+        android:background="@drawable/rounded_edittext_register_login"
+        android:padding="16dp"
+        app:layout_constraintStart_toEndOf="@+id/left_name"
+        app:layout_constraintTop_toTopOf="@+id/left_name" />
 
     <TextView
         android:id="@+id/left_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="name"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingTop="15dp"
+        android:text="Name"
+        android:textAlignment="center"
+        android:textStyle="bold"
         android:textSize="17sp"
-        android:textStyle="bold">
-
-    </TextView>
-
-    <TextView
-        android:id="@+id/left_chat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="chat_text">
-
-    </TextView>
-
-</LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
+</androidx.constraintlayout.widget.ConstraintLayout>

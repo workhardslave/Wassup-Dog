@@ -16,10 +16,10 @@
         android:enabled="true"
         android:title="@string/gallery"/>
     <item
-        android:id="@+id/action_chat"
-        android:icon="@drawable/ic_favorite_border"
+        android:id="@+id/action_alarm"
+        android:icon="@drawable/ic_feedback_black"
         android:enabled="true"
-        android:title="@string/favorite"/>
+        android:title="@string/alarm"/>
 
     <item
         android:id="@+id/action_account"

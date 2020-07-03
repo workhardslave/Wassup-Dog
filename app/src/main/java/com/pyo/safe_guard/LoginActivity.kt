@@ -1,25 +1,18 @@
 package com.pyo.safe_guard
 
-
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
 
     private lateinit var auth: FirebaseAuth
-
-    val RC_SIGN_IN = 9001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,33 +30,6 @@ class LoginActivity : AppCompatActivity() {
             doLogin()
         }
 
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        // 구글 승인 정보 가져오기
-        if(requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result!!.isSuccess) {
-                val account = result.signInAccount
-                firebaseAuthWithGoogle(account)
-            } else {
-
-            }
-        }
-    }
-
-    // 파이어베이스 인증
-    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
-        var credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-        auth?.signInWithCredential(credential)?.addOnCompleteListener { task ->
-            if(task.isSuccessful){
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }else{
-                Toast.makeText(this, "로그인에 실패했습니다." ,Toast.LENGTH_LONG).show()
-            }
-        }
     }
 
     // 이메일로 로그인

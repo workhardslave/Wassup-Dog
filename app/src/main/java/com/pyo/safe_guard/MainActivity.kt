@@ -47,14 +47,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                     startActivity(Intent(this,
                         AddPhotoActivity::class.java))
 
-
                 }
-
                 return true
             }
-            R.id.action_chat-> {
-                var chatFragment = AlarmFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.main_content, chatFragment).commit()
+            R.id.action_alarm-> {
+                var alarmFragment = AlarmFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.main_content, alarmFragment).commit()
                 return true
             }
 
@@ -83,9 +81,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         setContentView(R.layout.activity_main)
         bottom_navigation.setOnNavigationItemSelectedListener(this)
 
-        //Set default screen
+        // 첫 화면 홈으로 고정
         bottom_navigation.selectedItemId = R.id.action_home
 
+        // 채팅방으로 이동
         toolbar_btn_chat.setOnClickListener {
             val intent = Intent(this, ChatListActivity::class.java)
             startActivity(intent)

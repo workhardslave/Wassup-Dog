@@ -60,18 +60,18 @@ class ChatRoomActivity : AppCompatActivity() {
 //                Log.d(TAG, "p0 : "+ msg)
 
                 val model = p0.getValue(ChatModel::class.java)
+                Log.d(TAG, "model:" + model)
 
 
                 val msg = model?.message.toString()
                 val who = model?.who
                 val yourUid = model?.yourUid
 
-                var list = mutableListOf<String>()
-                list.add(msg)
+                Log.d(TAG, "msg : " + msg)
 
-                for(i in list.indices)
+
                 if(who == "me") {
-                    adapter.add(ChatRightMe(list[i]))
+                    adapter.add(ChatRightMe(msg))
                 } else {
                     db.collection("users")
                         .get()
@@ -79,7 +79,7 @@ class ChatRoomActivity : AppCompatActivity() {
                             for(document in result) {
                                 // 상대방 이름 출력
                                 if(document.get("uid") == yourUid) {
-                                    adapter.add(ChatLeftYou(list[i], document.get("username").toString()))
+                                    adapter.add(ChatLeftYou(msg, document.get("username").toString()))
                                     return@addOnSuccessListener
                                 }
                             }

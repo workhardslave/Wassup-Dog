@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginTop="10dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp">
@@ -17,6 +18,7 @@
             android:id="@+id/account_btn_follow_signout"
             android:layout_width="250dp"
             android:layout_height="40dp"
+            android:background="@drawable/rounded_button"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="35dp"
             android:layout_marginBottom="2dp"

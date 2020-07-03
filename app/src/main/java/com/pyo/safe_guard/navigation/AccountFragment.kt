@@ -43,15 +43,15 @@ class AccountFragment : Fragment() {
         currentUserUid = auth?.currentUser?.uid
 
         if(uid == currentUserUid){
-            //MyPage
-            fragmentView?.account_btn_follow_signout?.text = "Signout"
+            // 마이 페이지
+            fragmentView?.account_btn_follow_signout?.text = "로그아웃"
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
                 activity?.finish()
                 startActivity(Intent(activity, LoginActivity::class.java))
                 auth?.signOut()
             }
         }else{
-            //OtherUserPage
+            // 상대방 페이지
             fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
             var mainactivity = (activity as MainActivity)
 //            mainactivity?.toolbar_username?.text = arguments?.getString("userId")
@@ -82,13 +82,13 @@ class AccountFragment : Fragment() {
     fun getFollowerAndFollowing(){
         firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
             if(documentSnapshot == null) return@addSnapshotListener
-            var followDTO = documentSnapshot.toObject(FollowModel::class.java)
-            if(followDTO?.followingCount != null){
-                fragmentView?.account_tv_following_count?.text = followDTO?.followingCount?.toString()
+            var followModels = documentSnapshot.toObject(FollowModel::class.java)
+            if(followModels?.followingCount != null){
+                fragmentView?.account_tv_following_count?.text = followModels?.followingCount?.toString()
             }
-            if(followDTO?.followerCount != null){
-                fragmentView?.account_tv_follower_count?.text = followDTO?.followerCount?.toString()
-                if(followDTO?.followers?.containsKey(currentUserUid!!)){
+            if(followModels?.followerCount != null){
+                fragmentView?.account_tv_follower_count?.text = followModels?.followerCount?.toString()
+                if(followModels?.followers?.containsKey(currentUserUid!!)){
                     fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow_cancel)
                     fragmentView?.account_btn_follow_signout?.background
                         ?.setColorFilter(ContextCompat.getColor(activity!!,R.color.colorLightGray),
@@ -104,34 +104,33 @@ class AccountFragment : Fragment() {
         }
     }
     fun requestFollow(){
-        //Save data to my account
+        // 나의 데이터 저장
         var tsDocFollowing = firestore?.collection("users")?.document(currentUserUid!!)
         firestore?.runTransaction { transaction ->
-            var followDTO = transaction.get(tsDocFollowing!!).toObject(FollowModel::class.java)
-            if(followDTO == null){
-                followDTO = FollowModel()
-                followDTO!!.followingCount = 1
-                followDTO!!.followings[uid!!] = true
+            var followModels = transaction.get(tsDocFollowing!!).toObject(FollowModel::class.java)
+            if(followModels == null){
+                followModels = FollowModel()
+                followModels!!.followingCount = 1
+                followModels!!.followings[uid!!] = true
 
-                transaction.set(tsDocFollowing,followDTO!!)
+                transaction.set(tsDocFollowing,followModels!!)
                 return@runTransaction
             }
 
-            if(followDTO.followings.containsKey(uid)){
+            if(followModels.followings.containsKey(uid)){
                 //It remove following third person when a third person follow me
-                followDTO?.followingCount = followDTO?.followingCount - 1
-                followDTO?.followings.remove(uid)
+                followModels?.followingCount = followModels?.followingCount - 1
+                followModels?.followings.remove(uid)
             }else{
                 //It add following third person when a third person do not follow me
-                followDTO?.followingCount = followDTO?.followingCount + 1
-                followDTO?.followings[uid!!] = true
+                followModels?.followingCount = followModels?.followingCount + 1
+                followModels?.followings[uid!!] = true
             }
-            transaction.set(tsDocFollowing,followDTO)
+            transaction.set(tsDocFollowing,followModels)
             return@runTransaction
         }
 
-        //Save data to third account
-
+        // 3자에게 데이터 저장
         var tsDocFollower = firestore?.collection("users")?.document(uid!!)
         firestore?.runTransaction { transaction ->
             var followDTO = transaction.get(tsDocFollower!!).toObject(FollowModel::class.java)
@@ -145,11 +144,11 @@ class AccountFragment : Fragment() {
             }
 
             if(followDTO!!.followers.containsKey(currentUserUid!!)){
-                //It cancel my follower when I follow a third person
+                // 팔로워 취소
                 followDTO!!.followerCount = followDTO!!.followerCount - 1
                 followDTO!!.followers.remove(currentUserUid!!)
             }else{
-                //It add my follower when I don't follow a third person
+                // 팔로워 추가
                 followDTO!!.followerCount = followDTO!!.followerCount + 1
                 followDTO!!.followers[currentUserUid!!] = true
                 followerAlarm(uid!!)
@@ -159,13 +158,13 @@ class AccountFragment : Fragment() {
         }
     }
     fun followerAlarm(destinationUid : String){
-        var alarmDTO = AlarmModel()
-        alarmDTO.destinationUid = destinationUid
-        alarmDTO.userId = auth?.currentUser?.email
-        alarmDTO.uid = auth?.currentUser?.uid
-        alarmDTO.kind = 2
-        alarmDTO.timestamp = System.currentTimeMillis()
-        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+        var alarmModels = AlarmModel()
+        alarmModels.destinationUid = destinationUid
+        alarmModels.userId = auth?.currentUser?.email
+        alarmModels.uid = auth?.currentUser?.uid
+        alarmModels.kind = 2
+        alarmModels.timestamp = System.currentTimeMillis()
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmModels)
 
         var message = auth?.currentUser?.email + getString(R.string.alarm_follow)
         FcmPush.instance.sendMessage(destinationUid,"wassupDOG",message)
@@ -180,7 +179,7 @@ class AccountFragment : Fragment() {
         }
     }
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-        var contentDTOs : ArrayList<ContentModel> = arrayListOf()
+        var contentModels : ArrayList<ContentModel> = arrayListOf()
         init {
             firestore?.collection("images")?.whereEqualTo("uid",uid)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 //Sometimes, This code return null of querySnapshot when it signout
@@ -188,9 +187,9 @@ class AccountFragment : Fragment() {
 
                 //Get data
                 for(snapshot in querySnapshot.documents){
-                    contentDTOs.add(snapshot.toObject(ContentModel::class.java)!!)
+                    contentModels.add(snapshot.toObject(ContentModel::class.java)!!)
                 }
-                fragmentView?.account_tv_post_count?.text = contentDTOs.size.toString()
+                fragmentView?.account_tv_post_count?.text = contentModels.size.toString()
                 notifyDataSetChanged()
             }
         }
@@ -208,12 +207,12 @@ class AccountFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return contentDTOs.size
+            return contentModels.size
         }
 
         override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
             var imageview = (p0 as CustomViewHolder).imageview
-            Glide.with(p0.itemView.context).load(contentDTOs[p1].imageUrl).apply(RequestOptions().centerCrop()).into(imageview)
+            Glide.with(p0.itemView.context).load(contentModels[p1].imageUrl).apply(RequestOptions().centerCrop()).into(imageview)
         }
 
     }
