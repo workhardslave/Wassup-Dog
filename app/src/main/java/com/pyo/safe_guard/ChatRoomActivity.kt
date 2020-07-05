@@ -69,7 +69,6 @@ class ChatRoomActivity : AppCompatActivity() {
 
                 Log.d(TAG, "msg : " + msg)
 
-
                 if(who == "me") {
                     adapter.add(ChatRightMe(msg))
                 } else {
@@ -98,7 +97,7 @@ class ChatRoomActivity : AppCompatActivity() {
         recyclerview_chat_room.adapter = adapter
         readRef.addChildEventListener(childEventListener)
 
-        val myRef_list = database.getReference("message-user-list")
+//        val myRef_list = database.getReference("message-user-list")
 
         button_chat_room.setOnClickListener {
 
@@ -111,7 +110,7 @@ class ChatRoomActivity : AppCompatActivity() {
             val chat_get = ChatModel(yourUid, myUid.toString(),  message, System.currentTimeMillis(), "you")
             myRef.child(yourUid.toString()).child(myUid.toString()).push().setValue(chat_get)
 
-            myRef_list.child(myUid.toString()).child(yourUid).setValue(chat)
+//            myRef_list.child(myUid.toString()).child(yourUid).setValue(chat)
 
             editText_chat_room.setText("")
 

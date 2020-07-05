@@ -27,7 +27,6 @@ class AddPhotoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_photo)
 
-
         storage = FirebaseStorage.getInstance()
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -72,23 +71,17 @@ class AddPhotoActivity : AppCompatActivity() {
 
             // 이미지의 다운로드 url
             contentModels.imageUrl = uri.toString()
-
             // 유저의 uid
             contentModels.uid = auth?.currentUser?.uid
-
             // 유저 아이디
             contentModels.userId = auth?.currentUser?.email
-
             // 컨텐츠 설명
             contentModels.explain = addphoto_edit_explain.text.toString()
-
             // 시간
             contentModels.timestamp = System.currentTimeMillis()
 
             firestore?.collection("images")?.document()?.set(contentModels)
-
             setResult(Activity.RESULT_OK)
-
             finish()
         }
 

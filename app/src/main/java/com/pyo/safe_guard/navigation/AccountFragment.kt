@@ -118,11 +118,11 @@ class AccountFragment : Fragment() {
             }
 
             if(followModels.followings.containsKey(uid)){
-                //It remove following third person when a third person follow me
+                // 팔로우 취소
                 followModels?.followingCount = followModels?.followingCount - 1
                 followModels?.followings.remove(uid)
             }else{
-                //It add following third person when a third person do not follow me
+                // 팔로우 추가
                 followModels?.followingCount = followModels?.followingCount + 1
                 followModels?.followings[uid!!] = true
             }
@@ -167,7 +167,7 @@ class AccountFragment : Fragment() {
         FirebaseFirestore.getInstance().collection("alarms").document().set(alarmModels)
 
         var message = auth?.currentUser?.email + getString(R.string.alarm_follow)
-        FcmPush.instance.sendMessage(destinationUid,"wassupDOG",message)
+        FcmPush.instance.sendMessage(destinationUid,"왔어독",message)
     }
     fun getProfileImage(){
         firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->

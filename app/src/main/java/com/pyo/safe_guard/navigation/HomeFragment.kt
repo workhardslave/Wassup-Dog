@@ -17,7 +17,6 @@ import com.pyo.safe_guard.navigation.model.AlarmModel
 import com.pyo.safe_guard.navigation.model.ContentModel
 import com.pyo.safe_guard.navigation.util.FcmPush
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.item_comment.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
 
@@ -165,7 +164,7 @@ class HomeFragment : Fragment() {
             FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
             var message = FirebaseAuth.getInstance()?.currentUser?.email +  getString(R.string.alarm_favorite)
-            FcmPush.instance.sendMessage(destinationUid,"wassupDOG",message)
+            FcmPush.instance.sendMessage(destinationUid,"왔어독",message)
         }
 
     }

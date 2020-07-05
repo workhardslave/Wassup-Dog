@@ -29,12 +29,12 @@ class FcmPush {
             if(task.isSuccessful){
                 var token = task?.result?.get("pushToken").toString()
 
-                var pushDTO = PushModel()
-                pushDTO.to = token
-                pushDTO.notification.title = title
-                pushDTO.notification.body = message
+                var pushModel = PushModel()
+                pushModel.to = token
+                pushModel.notification.title = title
+                pushModel.notification.body = message
 
-                var body = RequestBody.create(JSON,gson?.toJson(pushDTO))
+                var body = RequestBody.create(JSON,gson?.toJson(pushModel))
                 var request = Request.Builder()
                     .addHeader("Content-Type","application/json")
                     .addHeader("Authorization","key="+serverKey)
