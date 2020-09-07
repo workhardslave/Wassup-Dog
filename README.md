@@ -1,4 +1,4 @@
-## Wassup Dog (Graduation Project)
+## Wassup Dog (Mobile Programming Final Project)
 반려견 정보 공유 플랫폼 왔어독
 
 
@@ -19,3 +19,4 @@
 
 ### Developer
 - https://github.com/workhardslave (Seunghwan Hwang, 황승환)
+- https://github.com/pyoseunghoon (Seunghoon Pyo, 표승훈)
