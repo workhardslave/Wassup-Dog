@@ -80,7 +80,7 @@ class AccountFragment : Fragment() {
         return fragmentView
     }
     fun getFollowerAndFollowing(){
-        firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+        firestore?.collection("follows")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
             if(documentSnapshot == null) return@addSnapshotListener
             var followModels = documentSnapshot.toObject(FollowModel::class.java)
             if(followModels?.followingCount != null){
@@ -105,7 +105,7 @@ class AccountFragment : Fragment() {
     }
     fun requestFollow(){
         // 나의 데이터 저장
-        var tsDocFollowing = firestore?.collection("users")?.document(currentUserUid!!)
+        var tsDocFollowing = firestore?.collection("follows")?.document(currentUserUid!!)
         firestore?.runTransaction { transaction ->
             var followModels = transaction.get(tsDocFollowing!!).toObject(FollowModel::class.java)
             if(followModels == null){
@@ -131,7 +131,7 @@ class AccountFragment : Fragment() {
         }
 
         // 3자에게 데이터 저장
-        var tsDocFollower = firestore?.collection("users")?.document(uid!!)
+        var tsDocFollower = firestore?.collection("follows")?.document(uid!!)
         firestore?.runTransaction { transaction ->
             var followDTO = transaction.get(tsDocFollower!!).toObject(FollowModel::class.java)
             if(followDTO == null){
