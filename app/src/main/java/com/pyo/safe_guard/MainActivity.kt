@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.pyo.safe_guard.navigation.*
@@ -70,11 +71,22 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         return false
     }
-    fun setToolbarDefault(){
+    fun setToolbarDefault() {
         toolbar_btn_chat.visibility = View.VISIBLE
         toolbar_btn_back.visibility = View.GONE
         toolbar_title_image.visibility = View.VISIBLE
     }
+
+//    fun registerPushToken() {
+//        FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+//            val token = task.result?.token
+//            val uid = FirebaseAuth.getInstance().currentUser?.uid
+//            val map = mutableMapOf<String, Any>()
+//            map["pushToken"] = token!!
+//
+//            FirebaseFirestore.getInstance().collection("pushtokens").document(uid!!).set(map)
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +95,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         // 첫 화면 홈으로 고정
         bottom_navigation.selectedItemId = R.id.action_home
+//        registerPushToken()
 
         // 채팅방으로 이동
         toolbar_btn_chat.setOnClickListener {
